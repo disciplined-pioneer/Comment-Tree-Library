@@ -1,17 +1,7 @@
-import unittest
-import os
 import json
-from io import StringIO
-from unittest.mock import patch
-import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import Element
-
-
-from comment_tree import CommentTree
 import unittest
 from io import StringIO
 from unittest.mock import patch
-import json
 import xml.etree.ElementTree as ET
 from comment_tree import CommentTree
 

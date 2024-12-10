@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<comments><comment id="1" author="Алиса" parent_id="None"><text>Это первый комментарий</text><comment id="2" author="Обновлённый Боб" parent_id="1"><text>Обновлённый ответ на первый комментарий</text></comment></comment><comment id="4" author="Давид" parent_id="None"><text>Ещё один комментарий на верхнем уровне</text></comment></comments>

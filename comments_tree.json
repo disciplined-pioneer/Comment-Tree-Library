@@ -1,0 +1,24 @@
+[
+    {
+        "comment_id": 1,
+        "text": "Это первый комментарий",
+        "author": "Алиса",
+        "parent_id": null,
+        "children": [
+            {
+                "comment_id": 2,
+                "text": "Обновлённый ответ на первый комментарий",
+                "author": "Обновлённый Боб",
+                "parent_id": 1,
+                "children": []
+            }
+        ]
+    },
+    {
+        "comment_id": 4,
+        "text": "Ещё один комментарий на верхнем уровне",
+        "author": "Давид",
+        "parent_id": null,
+        "children": []
+    }
+]
