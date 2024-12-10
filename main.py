@@ -5,35 +5,30 @@ from datetime import datetime
 from typing import Callable, Optional
 
 class CommentNode:
-    def __init__(self, comment_id: int, text: str, author: str, date: Optional[datetime] = None, parent_id: Optional[int] = None):
+    def __init__(self, comment_id: int, text: str, author: str, parent_id: Optional[int] = None):
         self.comment_id = comment_id
         self.text = text
         self.author = author
-        self.date = date or datetime.now()
         self.parent_id = parent_id
         self.children = []
 
     def to_dict(self):
         return {
-            "comment_id": self.comment_id,
-            "text": self.text,
-            "author": self.author,
-            "date": self.date.isoformat() if isinstance(self.date, datetime) else datetime.fromtimestamp(self.date).isoformat(),
-            "parent_id": self.parent_id,
-            "children": [child.to_dict() for child in self.children]
+            'comment_id': self.comment_id,
+            'text': self.text,
+            'author': self.author,
+            'parent_id': self.parent_id,
+            'children': [child.to_dict() for child in self.children]
         }
 
     @staticmethod
     def from_dict(data):
-        node = CommentNode(
-            comment_id=data["comment_id"],
-            text=data["text"],
-            author=data["author"],
-            date=datetime.fromisoformat(data["date"]),
-            parent_id=data["parent_id"]
-        )
-        node.children = [CommentNode.from_dict(child) for child in data["children"]]
+        node = CommentNode(data['comment_id'], data['text'], data['author'], data['parent_id'])
+        for child_data in data['children']:
+            child_node = CommentNode.from_dict(child_data)
+            node.children.append(child_node)
         return node
+
 
 class CommentTree:
     def __init__(self):
@@ -85,16 +80,31 @@ class CommentTree:
             action(node)
             queue.extend(node.children)
 
-    def to_json(self, filename: str = "comments_tree.json"):
+    def to_json(self, filename: str = "comments_tree.json", save_to_file: bool = True):
+        try:
+            if not filename:
+                raise ValueError("Filename cannot be empty.")
+            
+            if save_to_file:
+                data = [node.to_dict() for node in self.nodes.values() if node.parent_id is None]
+                project_directory = os.path.dirname(os.path.abspath(__file__))
+                filepath = os.path.join(project_directory, filename)
+                
+                try:
+                    with open(filepath, "w", encoding="utf-8") as file:
+                        json.dump(data, file, indent=4, ensure_ascii=False)
+                    print(f"Data successfully saved to file: {filepath}")
+                except OSError as e:
+                    raise FileNotFoundError(f"Error saving file: {e}")
+            
+            return json.dumps([node.to_dict() for node in self.nodes.values() if node.parent_id is None], indent=4)
 
-        data = [node.to_dict() for node in self.nodes.values() if node.parent_id is None]
-        project_directory = os.path.dirname(os.path.abspath(__file__))  # Определяем папку проекта
-        filepath = os.path.join(project_directory, filename)
-        
-        with open(filepath, "w", encoding="utf-8") as file:
-            json.dump(data, file, indent=4, ensure_ascii=False)
-        print(f"Данные успешно сохранены в файл: {filepath}")
-        return json.dumps([node.to_dict() for node in self.nodes.values() if node.parent_id is None], indent=4)
+        except ValueError as ve:
+            print(f"Value error: {ve}")
+            raise
+        except Exception as e:
+            print(f"Error processing data: {e}")
+            raise
 
     def from_json(self, data: str):
         nodes_data = json.loads(data)
@@ -107,6 +117,35 @@ class CommentTree:
         self.nodes[node.comment_id] = node
         for child in node.children:
             self._add_subtree(child)
+
+    def print_dfs(self, start_id: int):
+        def dfs(node, level=0):
+            print("    " * level + f"- {node.text} (by {node.author})")
+            for child in node.children:
+                dfs(child, level + 1)
+        
+        if start_id not in self.nodes:
+            print(f"Start ID {start_id} does not exist.")
+            return
+        print("DFS:")
+        dfs(self.nodes[start_id])
+
+    def print_bfs(self, start_id: int):
+        if start_id not in self.nodes:
+            print(f"Start ID {start_id} does not exist.")
+            return
+        
+        print("BFS:")
+        queue = deque([self.nodes[start_id]])
+        level = 0
+        while queue:
+            level_size = len(queue)
+            print(f"\nLevel {level}:")
+            for _ in range(level_size):
+                node = queue.popleft()
+                print(f"- {node.text} (by {node.author})")
+                queue.extend(node.children)
+            level += 1
 
 # Функция для красивого отображения дерева в консоли
 def print_comment_tree(tree):
@@ -125,40 +164,39 @@ def print_comment_tree(tree):
 # Создание дерева комментариев
 tree = CommentTree()
 
-# Добавление комментариев
-tree.add_comment(1, "Root comment", "Alice")
-tree.add_comment(2, "Reply to root", "Bob", parent_id=1)
-tree.add_comment(3, "Another reply", "Charlie", parent_id=1)
-tree.add_comment(4, "Nested reply", "Dave", parent_id=2)
-tree.add_comment(5, "Further nested reply", "Eve", parent_id=4)
-tree.add_comment(6, "Sibling reply to nested", "Frank", parent_id=2)
-tree.add_comment(7, "Deeply nested reply", "Grace", parent_id=5)
-tree.add_comment(8, "Another root-level comment", "Hank")
-tree.add_comment(9, "Reply to another root-level comment", "Ivy", parent_id=8)
-tree.add_comment(10, "Nested under Ivy", "Jack", parent_id=9)
-tree.add_comment(11, "Another reply to Ivy", "Ken", parent_id=9)
-tree.add_comment(12, "Reply to Charlie", "Liam", parent_id=3)
-tree.add_comment(13, "Further nesting under Ken", "Mia", parent_id=11)
-tree.add_comment(14, "Another deeply nested reply", "Nina", parent_id=13)
-tree.add_comment(15, "Sibling to deeply nested", "Oscar", parent_id=13)
-tree.add_comment(16, "Independent root-level comment", "Pam")
-tree.add_comment(17, "Reply to Pam", "Quincy", parent_id=16)
+def start():
 
-# Обход дерева в глубину
-tree.traverse_dfs(1, lambda node: print(f"DFS: {node.text}"))
-print('\n')
+    # Добавление комментариев
+    tree.add_comment(1, "Root comment", "Alice")
+    tree.add_comment(2, "Reply to root", "Bob", parent_id=1)
+    tree.add_comment(3, "Another reply", "Charlie", parent_id=1)
+    tree.add_comment(4, "Nested reply", "Dave", parent_id=2)
+    tree.add_comment(5, "Further nested reply", "Eve", parent_id=4)
+    tree.add_comment(6, "Sibling reply to nested", "Frank", parent_id=2)
+    tree.add_comment(7, "Deeply nested reply", "Grace", parent_id=5)
+    tree.add_comment(8, "Another root-level comment", "Hank")
+    tree.add_comment(9, "Reply to another root-level comment", "Ivy", parent_id=8)
+    tree.add_comment(10, "Nested under Ivy", "Jack", parent_id=9)
+    tree.add_comment(11, "Another reply to Ivy", "Ken", parent_id=9)
+    tree.add_comment(12, "Reply to Charlie", "Liam", parent_id=3)
+    tree.add_comment(13, "Further nesting under Ken", "Mia", parent_id=11)
+    tree.add_comment(14, "Another deeply nested reply", "Nina", parent_id=13)
+    tree.add_comment(15, "Sibling to deeply nested", "Oscar", parent_id=13)
+    tree.add_comment(16, "Independent root-level comment", "Pam")
+    tree.add_comment(17, "Reply to Pam", "Quincy", parent_id=16)
 
-# Обход дерева в ширину
-tree.traverse_bfs(1, lambda node: print(f"BFS: {node.text}"))
+start()
 
-# Печать дерева комментариев в консоли
-print("\nСтруктура дерева:")
-print_comment_tree(tree)
+# Вывод комментариев по глубине (DFS)
+tree.print_dfs(start_id=1)
+
+# Вывод комментариев по ширине (BFS)
+tree.print_bfs(start_id=1)
 
 # Экспорт в JSON
-json_data = tree.to_json()
+json_data = tree.to_json(filename='file.json', save_to_file=True)
 print("\nJSON Export:")
-print(json_data)
+
 
 # Импорт из JSON
 tree.from_json(json_data)

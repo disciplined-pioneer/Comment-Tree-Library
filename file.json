@@ -3,35 +3,30 @@
         "comment_id": 1,
         "text": "Root comment",
         "author": "Alice",
-        "date": "2024-12-10T23:21:22.295466",
         "parent_id": null,
         "children": [
             {
                 "comment_id": 2,
                 "text": "Reply to root",
                 "author": "Bob",
-                "date": "2024-12-10T23:21:22.295466",
                 "parent_id": 1,
                 "children": [
                     {
                         "comment_id": 4,
                         "text": "Nested reply",
                         "author": "Dave",
-                        "date": "2024-12-10T23:21:22.295466",
                         "parent_id": 2,
                         "children": [
                             {
                                 "comment_id": 5,
                                 "text": "Further nested reply",
                                 "author": "Eve",
-                                "date": "2024-12-10T23:21:22.295466",
                                 "parent_id": 4,
                                 "children": [
                                     {
                                         "comment_id": 7,
                                         "text": "Deeply nested reply",
                                         "author": "Grace",
-                                        "date": "2024-12-10T23:21:22.295466",
                                         "parent_id": 5,
                                         "children": []
                                     }
@@ -43,7 +38,6 @@
                         "comment_id": 6,
                         "text": "Sibling reply to nested",
                         "author": "Frank",
-                        "date": "2024-12-10T23:21:22.295466",
                         "parent_id": 2,
                         "children": []
                     }
@@ -53,14 +47,12 @@
                 "comment_id": 3,
                 "text": "Another reply",
                 "author": "Charlie",
-                "date": "2024-12-10T23:21:22.295466",
                 "parent_id": 1,
                 "children": [
                     {
                         "comment_id": 12,
                         "text": "Reply to Charlie",
                         "author": "Liam",
-                        "date": "2024-12-10T23:21:22.295466",
                         "parent_id": 3,
                         "children": []
                     }
@@ -72,21 +64,18 @@
         "comment_id": 8,
         "text": "Another root-level comment",
         "author": "Hank",
-        "date": "2024-12-10T23:21:22.295466",
         "parent_id": null,
         "children": [
             {
                 "comment_id": 9,
                 "text": "Reply to another root-level comment",
                 "author": "Ivy",
-                "date": "2024-12-10T23:21:22.295466",
                 "parent_id": 8,
                 "children": [
                     {
                         "comment_id": 10,
                         "text": "Nested under Ivy",
                         "author": "Jack",
-                        "date": "2024-12-10T23:21:22.295466",
                         "parent_id": 9,
                         "children": []
                     },
@@ -94,21 +83,18 @@
                         "comment_id": 11,
                         "text": "Another reply to Ivy",
                         "author": "Ken",
-                        "date": "2024-12-10T23:21:22.295466",
                         "parent_id": 9,
                         "children": [
                             {
                                 "comment_id": 13,
                                 "text": "Further nesting under Ken",
                                 "author": "Mia",
-                                "date": "2024-12-10T23:21:22.295466",
                                 "parent_id": 11,
                                 "children": [
                                     {
                                         "comment_id": 14,
                                         "text": "Another deeply nested reply",
                                         "author": "Nina",
-                                        "date": "2024-12-10T23:21:22.295466",
                                         "parent_id": 13,
                                         "children": []
                                     },
@@ -116,7 +102,6 @@
                                         "comment_id": 15,
                                         "text": "Sibling to deeply nested",
                                         "author": "Oscar",
-                                        "date": "2024-12-10T23:21:22.295466",
                                         "parent_id": 13,
                                         "children": []
                                     }
@@ -132,14 +117,12 @@
         "comment_id": 16,
         "text": "Independent root-level comment",
         "author": "Pam",
-        "date": "2024-12-10T23:21:22.295466",
         "parent_id": null,
         "children": [
             {
                 "comment_id": 17,
                 "text": "Reply to Pam",
                 "author": "Quincy",
-                "date": "2024-12-10T23:21:22.295466",
                 "parent_id": 16,
                 "children": []
             }

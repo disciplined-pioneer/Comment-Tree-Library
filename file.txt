@@ -1,0 +1,10 @@
+# Обход дерева в глубину
+tree.traverse_dfs(1, lambda node: print(f"DFS: {node.text}"))
+print('\n')
+
+# Обход дерева в ширину
+tree.traverse_bfs(1, lambda node: print(f"BFS: {node.text}"))
+
+# Печать дерева комментариев в консоли
+print("\nСтруктура дерева:")
+print_comment_tree(tree)
