@@ -1,11 +1,11 @@
 import os
 import json
-import xml.etree.ElementTree as ET
 from collections import deque
+import xml.etree.ElementTree as ET
 from typing import Callable, Optional
 
 class CommentNode:
-    
+
     def __init__(self, comment_id: int, text: str, author: str, parent_id: Optional[int] = None):
         self.comment_id = comment_id
         self.text = text
