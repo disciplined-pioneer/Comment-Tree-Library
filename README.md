@@ -1,165 +1,165 @@
-# Библиотека для дерева комментариев
+# Comment Tree Library
 
-## Описание
+## Description
 
-Данная библиотека предоставляет инструменты для создания и обработки дерева комментариев, где каждый комментарий может иметь родительский элемент и множество дочерних элементов. Она поддерживает добавление, обновление, удаление комментариев, а также различные способы их обхода (в глубину и в ширину). Также библиотека предоставляет возможность сериализовать дерево комментариев в форматах JSON и XML и загружать его из этих форматов.
+This library provides tools for creating and processing a comment tree, where each comment can have a parent and multiple child elements. It supports adding, updating, and deleting comments, as well as various traversal methods (depth-first and breadth-first). Additionally, the library offers the ability to serialize the comment tree into JSON and XML formats and load it from these formats.
 
-### Структура проекта
+### Project Structure
 
-- **`main.py`** — файл с примером работы основных функций библиотеки.
-- **`units_test.py`** — файл с юнит-тестами для проверки функциональности библиотеки.
-- **`comment_tree.py`** — основной файл с классами, реализующими дерево комментариев.
+- **`main.py`** — A file demonstrating the core functions of the library.
+- **`units_test.py`** — A file with unit tests to verify the functionality of the library.
+- **`comment_tree.py`** — The main file containing classes that implement the comment tree.
 
-## Идея и решение
+## Concept and Solution
 
-Основной идеей является создание структуры данных для представления дерева комментариев, где каждый узел (комментарий) может иметь уникальный идентификатор, текст, автора и родительский комментарий. Это позволяет моделировать как простые комментарии, так и сложные обсуждения с несколькими уровнями вложенности.
+The main idea is to create a data structure for representing a comment tree, where each node (comment) has a unique identifier, text, author, and parent comment. This allows for modeling both simple comments and complex discussions with multiple levels of nesting.
 
-Ключевые особенности решения:
+Key features of the solution:
 
-1. **Гибкость структуры**: Каждый комментарий может иметь родителя, и при этом дерево поддерживает как одиночные комментарии, так и многоуровневые обсуждения.
-2. **Сериализация и загрузка**: Дерево может быть сериализовано в форматы JSON и XML для дальнейшего использования и сохранения данных.
-3. **Обход дерева**: Реализованы два основных метода обхода дерева комментариев — в глубину (DFS) и в ширину (BFS), что позволяет пользователю выбирать наиболее подходящий способ работы с деревом.
+1. **Flexible Structure**: Each comment can have a parent, and the tree supports both single comments and multi-level discussions.
+2. **Serialization and Loading**: The tree can be serialized into JSON and XML formats for further use and data storage.
+3. **Tree Traversal**: Two primary traversal methods are implemented for the comment tree — depth-first (DFS) and breadth-first (BFS), allowing users to choose the most suitable way to work with the tree.
 
-## Классы и функции
+## Classes and Functions
 
-### Класс `CommentNode`
+### Class `CommentNode`
 
-Этот класс представляет отдельный комментарий в дереве и содержит все необходимые данные для каждого комментария.
+This class represents an individual comment in the tree and contains all the necessary data for each comment.
 
-#### Атрибуты:
+#### Attributes:
 
-- **`comment_id`** (int): Уникальный идентификатор комментария.
-- **`text`** (str): Текст комментария.
-- **`author`** (str): Автор комментария.
-- **`parent_id`** (Optional[int]): Идентификатор родительского комментария (если есть).
-- **`children`** (list): Список дочерних комментариев.
+- **`comment_id`** (int): Unique identifier of the comment.
+- **`text`** (str): Text of the comment.
+- **`author`** (str): Author of the comment.
+- **`parent_id`** (Optional[int]): ID of the parent comment (if exists).
+- **`children`** (list): List of child comments.
 
-#### Методы:
+#### Methods:
 
-- **`to_dict()`**: Преобразует комментарий и его дочерние комментарии в словарь.
-- **`from_dict(data)`**: Создает объект `CommentNode` из словаря.
-- **`to_xml()`**: Преобразует комментарий и его дочерние комментарии в XML формат.
-- **`from_xml(element)`**: Создает объект `CommentNode` из XML элемента.
+- **`to_dict()`**: Converts the comment and its child comments into a dictionary.
+- **`from_dict(data)`**: Creates a `CommentNode` object from a dictionary.
+- **`to_xml()`**: Converts the comment and its child comments into XML format.
+- **`from_xml(element)`**: Creates a `CommentNode` object from an XML element.
 
-### Класс `CommentTree`
+### Class `CommentTree`
 
-Этот класс представляет собой дерево комментариев, поддерживающее добавление, удаление, обновление и обход комментариев.
+This class represents the entire comment tree, supporting the addition, deletion, updating, and traversal of comments.
 
-#### Атрибуты:
+#### Attributes:
 
-- **`nodes`** (dict): Словарь всех комментариев, где ключом является `comment_id`, а значением — объект `CommentNode`.
+- **`nodes`** (dict): A dictionary of all comments, where the key is `comment_id` and the value is a `CommentNode` object.
 
-#### Методы:
+#### Methods:
 
-- **`add_comment(comment_id, text, author, parent_id)`**: Добавляет новый комментарий в дерево. При необходимости указывает родительский комментарий.
-- **`delete_comment(comment_id)`**: Удаляет комментарий с указанным `comment_id` из дерева.
-- **`update_comment(comment_id, text=None, author=None)`**: Обновляет текст и/или автора комментария.
-- **`traverse_dfs(start_id, action)`**: Выполняет обход дерева в глубину (DFS), применяя указанное действие (например, печать текста комментария) ко всем узлам.
-- **`traverse_bfs(start_id, action)`**: Выполняет обход дерева в ширину (BFS), применяя указанное действие ко всем узлам.
-- **`to_json(filename, save_to_file)`**: Сериализует дерево комментариев в формат JSON. Если `save_to_file` установлено в `True`, данные сохраняются в файл.
-- **`from_json(data)`**: Загружает дерево комментариев из строки в формате JSON.
-- **`to_xml(filename, save_to_file)`**: Сериализует дерево комментариев в формат XML. Если `save_to_file` установлено в `True`, данные сохраняются в файл.
-- **`from_xml(xml_data)`**: Загружает дерево комментариев из строки в формате XML.
-- **`print_dfs(start_id)`**: Выводит дерево комментариев с использованием обхода в глубину (DFS).
-- **`print_bfs(start_id)`**: Выводит дерево комментариев с использованием обхода в ширину (BFS).
+- **`add_comment(comment_id, text, author, parent_id)`**: Adds a new comment to the tree, optionally specifying a parent comment.
+- **`delete_comment(comment_id)`**: Deletes the comment with the specified `comment_id` from the tree.
+- **`update_comment(comment_id, text=None, author=None)`**: Updates the text and/or author of a comment.
+- **`traverse_dfs(start_id, action)`**: Traverses the tree in depth-first (DFS) order, applying the specified action (e.g., printing the comment text) to all nodes.
+- **`traverse_bfs(start_id, action)`**: Traverses the tree in breadth-first (BFS) order, applying the specified action to all nodes.
+- **`to_json(filename, save_to_file)`**: Serializes the comment tree into JSON format. If `save_to_file` is `True`, the data is saved to a file.
+- **`from_json(data)`**: Loads the comment tree from a JSON string.
+- **`to_xml(filename, save_to_file)`**: Serializes the comment tree into XML format. If `save_to_file` is `True`, the data is saved to a file.
+- **`from_xml(xml_data)`**: Loads the comment tree from an XML string.
+- **`print_dfs(start_id)`**: Prints the comment tree using depth-first traversal (DFS).
+- **`print_bfs(start_id)`**: Prints the comment tree using breadth-first traversal (BFS).
 
-### Функция `print_comment_tree`
+### Function `print_comment_tree`
 
-Эта вспомогательная функция помогает красиво выводить дерево комментариев в читаемом формате. Она рекурсивно выводит текст комментариев, указывая, кто является их автором, и отображая структуру дерева с помощью отступов и символов.
+This helper function helps to neatly print the comment tree in a human-readable format. It recursively prints the text of the comments, showing the author and displaying the tree structure with indentation and symbols.
 
-## Пример использования (main.py)
+## Example Usage (main.py)
 
-В этом файле показан пример работы с библиотекой, который включает в себя:
+This file demonstrates the usage of the library, including:
 
-1. Добавление комментариев в дерево.
-2. Обход дерева с использованием DFS и BFS.
-3. Обновление и удаление комментариев.
-4. Сериализацию и загрузку данных из JSON и XML.
+1. Adding comments to the tree.
+2. Traversing the tree using DFS and BFS.
+3. Updating and deleting comments.
+4. Serializing and loading data from JSON and XML.
 
-### Пример вывода:
+### Example Output:
 
-1. **Добавление комментариев**:
+1. **Adding Comments**:
     
     ```
-    Добавление комментариев...
+    Adding comments...
     ```
     
-2. **Обход в глубину (DFS)**:
+2. **Depth-First Traversal (DFS)**:
     
     ```
-    Обход дерева комментариев в глубину (DFS):
-    - Это первый комментарий (by Алиса)
-        - Это ответ на первый комментарий (by Боб)
-            - Это ответ второго уровня (by Чарли)
+    Depth-first traversal of the comment tree (DFS):
+    - This is the first comment (by Alice)
+        - This is a reply to the first comment (by Bob)
+            - This is a second-level reply (by Charlie)
     ```
     
-3. **Обновление комментария**:
+3. **Updating a Comment**:
     
     ```
-    Обновление комментария с ID 2...
-    - Это первый комментарий (by Алиса)
-        - Обновлённый ответ на первый комментарий (by Обновлённый Боб)
-            - Это ответ второго уровня (by Чарли)
+    Updating the comment with ID 2...
+    - This is the first comment (by Alice)
+        - Updated reply to the first comment (by Updated Bob)
+            - This is a second-level reply (by Charlie)
     ```
     
-4. **Сериализация в JSON**:
+4. **Serialization to JSON**:
     
     ```
-    Сериализация дерева комментариев в формат JSON:
+    Serializing the comment tree into JSON format:
     { ... }
     ```
     
 
-## Тестирование (units_test.py)
+## Testing (units_test.py)
 
-В этом файле находятся юнит-тесты для проверки функциональности библиотеки. Тесты включают проверку:
+This file contains unit tests to verify the functionality of the library. The tests include checking:
 
-- Добавления и удаления комментариев.
-- Обновления существующих комментариев.
-- Обхода дерева в глубину и ширину.
-- Сериализации и десериализации данных в/из JSON и XML.
-- Обработки ошибок (например, добавление комментария с несуществующим родителем).
+- Adding and deleting comments.
+- Updating existing comments.
+- Tree traversal (depth-first and breadth-first).
+- Serialization and deserialization of data to/from JSON and XML.
+- Error handling (e.g., adding a comment with a non-existent parent).
 
-## Установка и запуск
+## Installation and Running
 
-Для использования библиотеки выполните следующие шаги:
+To use the library, follow these steps:
 
-1. Клонируйте репозиторий:
+1. Clone the repository:
     
     ```
     git clone <URL>
-    cd <репозиторий>
+    cd <repository>
     ```
     
-2. Запустите пример работы с библиотекой:
+2. Run the library example:
     
     ```
     python main.py
     ```
     
-3. Для запуска тестов используйте команду:
+3. To run the tests, use the command:
     
     ```
     python -m unittest units_test.py
     ```
 
-### Необходимые библиотеки:
+### Required Libraries:
 
-1. **json** (Стандартная библиотека Python)
-    - Используется для сериализации и десериализации данных в формате JSON.
-2. **xml.etree.ElementTree** (Стандартная библиотека Python)
-    - Используется для работы с XML-документами: чтение и запись данных в формате XML.
-3. **unittest** (Стандартная библиотека Python)
-    - Используется для написания тестов и тестирования функциональности библиотеки.
-4. **io** (Стандартная библиотека Python)
-    - Используется для работы с потоками ввода-вывода (например, для захвата вывода из функций во время тестирования).
-5. **collections** (Стандартная библиотека Python)
-    - Используется для работы с коллекциями данных, например, очередь (`deque`) для обхода дерева комментариев.
-6. **typing** (Стандартная библиотека Python)
-    - Используется для аннотаций типов, например, `Callable` и `Optional`, для улучшения читаемости и поддержки статического анализа кода.
-7. **unittest.mock** (Стандартная библиотека Python)
-    - Используется для создания фальшивых объектов и тестирования с их помощью, например, для перехвата вывода функций в тестах.
+1. **json** (Python Standard Library)
+    - Used for serializing and deserializing data in JSON format.
+2. **xml.etree.ElementTree** (Python Standard Library)
+    - Used for working with XML documents: reading and writing data in XML format.
+3. **unittest** (Python Standard Library)
+    - Used for writing tests and testing the functionality of the library.
+4. **io** (Python Standard Library)
+    - Used for working with input/output streams (e.g., capturing function output during testing).
+5. **collections** (Python Standard Library)
+    - Used for working with data collections, such as the deque for tree traversal.
+6. **typing** (Python Standard Library)
+    - Used for type annotations, such as `Callable` and `Optional`, for improved code readability and static analysis support.
+7. **unittest.mock** (Python Standard Library)
+    - Used for creating mock objects and testing with them, such as capturing function output in tests.
 
-### Требуемая версия Python:
+### Required Python Version:
 
-- **Python 3.7 и выше** (рекомендуется использовать Python 3.7 или новее)
+- **Python 3.7 and above** (Python 3.7 or newer is recommended)
